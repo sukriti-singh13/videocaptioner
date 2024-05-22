@@ -22,8 +22,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 - **TailwindCSS**
   
 
-## **Features**
-- **Responsive Design:** Ensures functionality across different devices.
+## **Documentation of Technical Decisions, User Experience, Trade-offs, and Future Enhancements**
+https://docs.google.com/document/d/1vBPjvXAvJI9GeYQE90J4qBfqaqSLbyUoznD_W-HogPg/edit
 
 
 
