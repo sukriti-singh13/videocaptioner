@@ -8,16 +8,18 @@ type Subtitle = {
   text: string;
 };
 const Page = () => {
-  const [subtitles, setSubtitles] = useState<Subtitle[]>([
-    {
-      startTime: '00:00:00',
-      endTime: '00:00:00',
-      text: '',
-    },
-  ]);
+  const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
   const searchParams = useSearchParams();
   const videoUrl = searchParams.get('videoUrl');
   const addSubtitle = () => {
+    const allSubtitlesHaveText = subtitles.every(
+      (subtitle) => subtitle.text.trim() !== ''
+    );
+    if (!allSubtitlesHaveText) {
+      console.log('Please fill in all subtitles');
+      return;
+    }
+
     setSubtitles([
       ...subtitles,
       {

@@ -30,11 +30,11 @@ const SubtitleEditor = ({
       </div>
       <input
         className='w-full
-        bg-black text-white text-xs p-2
+        bg-black text-white text-xs py-2 px-4 rounded-md
         '
         value={subtitle.text}
         onChange={(e) => setSubtitle({ ...subtitle, text: e.target.value })}
-        placeholder='Text'
+        placeholder='New Subtitle '
       />
     </div>
   );
