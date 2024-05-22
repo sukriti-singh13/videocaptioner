@@ -48,13 +48,13 @@ const Page = () => {
   if (!videoUrl) return null;
 
   return (
-    <div className='p-4 flex justify-between gap-6 bg-slate-900 h-screen'>
-      <div className='pt-8 w-[60%] p-4 '>
+    <div className='p-4  flex flex-col md:flex-row  gap-10 bg-slate-900 h-screen'>
+      <div className='pt-8  p-4 '>
         <video id='video' controls className='w-full rounded-md shadow-md'>
           <source src={videoUrl} type='video/mp4' />
         </video>
       </div>
-      <div className='flex flex-col items-center gap-4 pt-8 w-[30%]'>
+      <div className='flex flex-col items-center gap-4 pt-8 md:min-w-[32rem] ml-auto'>
         {subtitles.map((subtitle, i) => (
           <SubtitleEditor
             key={i}
@@ -69,7 +69,7 @@ const Page = () => {
         >
           Add Subtitle
         </button>
-        {subtitles.length &&  (
+        {subtitles.length && (
           <button
             className=' bg-blue-500 w-full margin-auto text-white rounded-md py-1'
             onClick={() => downloadVTT(subtitles)}
