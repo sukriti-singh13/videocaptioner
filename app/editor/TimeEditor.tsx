@@ -7,35 +7,21 @@ const TimeEditor = ({
   time: string;
   setTime: (time: string) => void;
 }) => {
-  const [hrs, mins, secs] = time.split(':');
+  const timeParts = time.split(':');
   return (
-    <div className='flex '>
-      <input
-        className='min-w-0 w-6 bg-black text-white text-center text-xs'
-        value={hrs}
-        onChange={(e) => {
-          setTime(`${e.target.value}:${mins}:${secs}`);
-        }}
-        placeholder='HH'
-      />{' '}
-      :
-      <input
-        className='min-w-0 w-6 bg-black text-white text-center text-xs'
-        value={mins}
-        onChange={(e) => {
-          setTime(`${hrs}:${e.target.value}:${secs}`);
-        }}
-        placeholder='MM'
-      />{' '}
-      :
-      <input
-        className='min-w-0 w-6 bg-black text-white text-center text-xs'
-        value={secs}
-        onChange={(e) => {
-          setTime(`${hrs}:${mins}:${e.target.value}`);
-        }}
-        placeholder='SS'
-      />
+    <div className='flex text-white'>
+      {timeParts.map((part, index) => (
+        <input
+          key={index}
+          className='w-12 bg-black text-white text-xs p-2'
+          value={part}
+          onChange={(e) => {
+            const newTimeParts = [...timeParts];
+            newTimeParts[index] = e.target.value;
+            setTime(newTimeParts.join(':'));
+          }}
+        />
+      ))}
     </div>
   );
 };
