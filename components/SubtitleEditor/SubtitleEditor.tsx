@@ -39,7 +39,7 @@ const SubtitleEditor = ({
         onChange={(e) => setSubtitle({ ...subtitle, text: e.target.value })}
         placeholder='New Subtitle '
       />
-        <button className=' bg-red-500 text-white rounded-full w-8 h-6   justify-end text-xs' onClick={deleteSubtitle}>
+        <button className=' bg-white text-red-500 rounded-full w-8 h-6 font-medium justify-end text-xs' onClick={deleteSubtitle}>
         x
       </button>
       </div>
