@@ -1,12 +1,12 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import SubtitleEditor from './SubtitleEditor';
-type Subtitle = {
-  startTime: string;
-  endTime: string;
-  text: string;
-};
+import SubtitleEditor from '../../components/SubtitleEditor/SubtitleEditor';
+
+import * as CONSTANTS from '../../utilities/constants/editor.constants';
+import { downloadVTT, updateVideoSubtitle } from '@/utilities/editor';
+import { Subtitle } from './editor.types';
+
 const Page = () => {
   const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
   const searchParams = useSearchParams();
@@ -16,14 +16,16 @@ const Page = () => {
       (subtitle) => subtitle.text.trim() !== ''
     );
     if (!allSubtitlesHaveText) {
-      console.log('Please fill in all subtitles');
       return;
     }
-
+    const lastSubtitle = subtitles[subtitles.length - 1];
+    const newStartTime = lastSubtitle
+      ? lastSubtitle.endTime
+      : CONSTANTS.DEFAULT_SUBTITLE.startTime;
     setSubtitles([
       ...subtitles,
       {
-        startTime: '00:00:00',
+        startTime: newStartTime,
         endTime: '00:00:00',
         text: '',
       },
@@ -34,61 +36,47 @@ const Page = () => {
     newSubtitles[index] = newSubtitle;
     setSubtitles(newSubtitles);
   };
-  const convertToVTT = (subtitles: Subtitle[]): string => {
-    let vttContent = 'WEBVTT\n\n';
-
-    subtitles.forEach((subtitle, index) => {
-      vttContent += `${index + 1}\n`;
-      vttContent += `${subtitle.startTime}.000 --> ${subtitle.endTime}.000\n`;
-      vttContent += `${subtitle.text}\n\n`;
-    });
-
-    return vttContent;
+  const deleteSubtitle = (index: number) => {
+    const newSubtitles = subtitles.filter((_, i) => i !== index);
+    setSubtitles(newSubtitles);
   };
 
   useEffect(() => {
-    const vttContent = convertToVTT(subtitles);
-    const blob = new Blob([vttContent], { type: 'text/vtt' });
-    const url = URL.createObjectURL(blob);
-    const trackElement = document.createElement('track');
-    trackElement.label = 'English';
-    trackElement.kind = 'subtitles';
-    trackElement.srclang = 'en';
-    trackElement.src = url;
-    trackElement.default = true;
-
-    const videoElement = document.getElementById('video') as HTMLVideoElement;
-    videoElement.innerHTML = ''; // Clear previous tracks
-    videoElement.appendChild(trackElement);
-
-    return () => {
-      URL.revokeObjectURL(url); // Clean up URL object
-    };
+    updateVideoSubtitle(subtitles);
   }, [subtitles]);
 
   if (!videoUrl) return null;
 
   return (
     <div className='p-4 flex justify-between gap-6 bg-slate-900 h-screen'>
-      <div className='pt-8 w-[60%]'>
-        <video id='video' controls className='w-full'>
+      <div className='pt-8 w-[60%] p-4 '>
+        <video id='video' controls className='w-full rounded-md shadow-md'>
           <source src={videoUrl} type='video/mp4' />
         </video>
       </div>
-      <div className='flex flex-col gap-4 pt-8 w-[30%]'>
+      <div className='flex flex-col items-center gap-4 pt-8 w-[30%]'>
         {subtitles.map((subtitle, i) => (
           <SubtitleEditor
             key={i}
             subtitle={subtitle}
             setSubtitle={(subtitle: Subtitle) => onSubtitleChange(subtitle, i)}
+            deleteSubtitle={() => deleteSubtitle(i)}
           />
         ))}
         <button
-          className='bg-blue-500 text-white rounded-md py-1'
+          className=' bg-blue-500 w-full margin-auto text-white rounded-md py-1'
           onClick={addSubtitle}
         >
           Add Subtitle
         </button>
+        {subtitles.length &&  (
+          <button
+            className=' bg-blue-500 w-full margin-auto text-white rounded-md py-1'
+            onClick={() => downloadVTT(subtitles)}
+          >
+            Export subtitles
+          </button>
+        )}
       </div>
     </div>
   );

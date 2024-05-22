@@ -1,9 +1,10 @@
 import React from 'react';
-import TimeEditor from './TimeEditor';
+import TimeEditor from '../TimeEditor/TimeEditor';
 
 const SubtitleEditor = ({
   subtitle,
   setSubtitle,
+  deleteSubtitle,
 }: {
   subtitle: {
     startTime: string;
@@ -15,6 +16,7 @@ const SubtitleEditor = ({
     endTime: string;
     text: string;
   }) => void;
+  deleteSubtitle: () => void;
 }) => {
   return (
     <div className='flex gap-4 w-full'>
@@ -28,6 +30,7 @@ const SubtitleEditor = ({
           setTime={(endTime) => setSubtitle({ ...subtitle, endTime })}
         />
       </div>
+      <div className='flex w-full gap-2'>
       <input
         className='w-full
         bg-black text-white text-xs py-2 px-4 rounded-md
@@ -36,6 +39,10 @@ const SubtitleEditor = ({
         onChange={(e) => setSubtitle({ ...subtitle, text: e.target.value })}
         placeholder='New Subtitle '
       />
+        <button className=' bg-red-500 text-white rounded-full w-8 h-6   justify-end text-xs' onClick={deleteSubtitle}>
+        x
+      </button>
+      </div>
     </div>
   );
 };

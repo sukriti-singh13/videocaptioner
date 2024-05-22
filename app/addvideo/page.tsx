@@ -1,10 +1,11 @@
 'use client';
 import Toast from '@/components/Toast/Toast';
+import { regexForValidUrl } from '@/utilities/common';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const Page = () => {
-    const regexForValidUrl =/^https?:\/\/(?:www\.)?[\w\-]+(\.[\w\-]+)+\/[\w\-\/\.]+\.mp4\b/
+
   const [videoUrl, setVideoUrl] = useState('');
   const [toast, setToast] = useState({ message: '', type: '' });
   const router = useRouter();
@@ -17,7 +18,7 @@ const Page = () => {
       return () => clearTimeout(toastTime);
     }
     router.push(`/editor?videoUrl=${videoUrl}`);
-    console.log('Video Url Submitted');
+    
   };
   return (
     <div className='h-screen flex flex-col bg-slate-900 relative'>
