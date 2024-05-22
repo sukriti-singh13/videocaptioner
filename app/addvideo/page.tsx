@@ -7,7 +7,7 @@ const Page = () => {
   const router = useRouter();
   const onVideoUrlSubmit = () => {
     if (videoUrl === '') return;
-    router.push(`/editor`);
+    router.push(`/editor?videoUrl=${videoUrl}`);
     console.log('Video Url Submitted');
   };
   return (
@@ -20,7 +20,7 @@ const Page = () => {
         className='px-1 py-2 rounded-sm text-black'
         onChange={(e) => setVideoUrl(e.target.value)}
       />
-      <button onClick={onVideoUrlSubmit}>Submit</button>
+      <button  onClick={onVideoUrlSubmit}>Submit</button>
     </div>
   );
 };
